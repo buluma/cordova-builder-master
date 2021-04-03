@@ -1,0 +1,79 @@
+jdk: oraclejdk8
+env:
+  global:
+  - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+  - ANDROID_VERSION=28 # Android 9 (API level 28)
+  - BUILD_TOOLS_VERSION=29.0.0
+  - NODEJS=10
+  - CORDOVA_CLI=latest
+matrix:
+  include:
+  - os: linux
+    sudo: false
+    language: android
+    android:
+      components:
+      - tools
+      - platform-tools
+      - tools
+      - build-tools-$BUILD_TOOLS_VERSION
+      - android-$ANDROID_VERSION
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+    addons:
+      apt:
+        chrome: stable
+        packages:
+        - oracle-java8-installer
+        - oracle-java8-set-default
+        - jq
+        - gradle
+    licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
+  allow_failures:
+  - os: osx
+    language: objective-c
+    osx_image: xcode8.3
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -f  $HOME/.gradle/caches/transforms-1/transforms-1.lock
+- rm -rf $HOME/.gradle/caches/3.5/fileHashes/
+- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+before_install:
+- export LANG=en_US.UTF-8
+- export CHROME_BIN=google-chrome
+- nvm install $NODEJS
+- npm install -g cordova@$CORDOVA_CLI
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+- echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+- yes | sdkmanager "platforms;android-27"
+script:
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./build-android.sh ; fi
+before_deploy:
+- export DATE=$(date +'DATE_%Y_%m_%d_%H%M%S')
+- export GIT_COMMIT=COMMIT_$(git log --format=%h -1)
+- export APP_NAME=$(cat www/config.xml | grep \<name\> | cut -d '>' -f2 | cut -d '<' -f1)
+- export APP_VERSION_CURRENT=$(cat www/config.xml | grep widget | grep id | grep version | cut -d '"' -f4)
+- export APK_NAME=${APP_NAME}-${APP_VERSION_CURRENT}-${DATE}-${GIT_COMMIT}
+- export APK_NAME=${APK_NAME// /}
+- export TRAVIS_TAG=${TRAVIS_TAG:-${APK_NAME}}
+- git tag ${TRAVIS_TAG// /}
+- git tag -l
+- cp $TRAVIS_BUILD_DIR/app-debug.apk $TRAVIS_BUILD_DIR/${APK_NAME// /}.apk
+- ls -ls $TRAVIS_BUILD_DIR
+deploy:
+  provider: releases
+  api_key:
+    secure: qv2i1a46BrRtahyjxKyuCmeOgiQukdpLRaaok5I4YaRgem0rXbTwhd6tjmdqKPUggM8lN40fFyw56ZWXXe3uuVXdeZ35Np9Kd4MT4cvZAQTFo1eltal0pUGH1+T3DiwY21leobjeT1Xy3DahgGqJv8xgcfl6RxLAyhK9Cz1LhhZAJVRDfGH8z+jPwcxZX4PUItJOYCsVyclJ6l8+oWA+CeyJs2QRP9lmTIMpeQbFjwPYrrVgfn2eMXNWfjHPh9GWyCJ5+bWNdJ0xJjzRsnDNPu9O23sCl0LhBJkjItpwl4s7Q3qJpkALn9WPRNx0OQwOTYfRJ0Wf3VFPzXbdluVXPguCYjJ1VcnqHFv1bBUgNmORPi3NNccZyb/orF4m4m2NDDRxyTW5yfd8BGCsIBNRpRDBh+c4KBvKreuaRBbPG8Y10gJqfIqDW438fNNc8nWAsi2FNjqP3CS0410+Rp9w7m3jz4fkXB+H45IO8xB1u906do6XR4B/TBFHkWlX4jmnhTAMFT8nyMJRogZLduS9wdpgCu7Cd2GFdTEt5V6Lt0yNIOlDEcLQ9RrP38UrPa/wxSfBzuiTI+vk5SL4NWn56TJxRFanDvBrSh60DNnX7OgP+fZ+p5MumN8ymknQIb4njwhun4jx5UoKDNSY5G7Dl2pR/LW4ub2ww5NFPngJl/0=
+  file: "$TRAVIS_BUILD_DIR/${APK_NAME}.apk"
+  skip_cleanup: true
+  on:
+    all_branches: true
