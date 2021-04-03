@@ -1,7 +1,7 @@
 # Cordova builder
 # on the cloud with Github and Travis-CI
 
-Github Actions ![CI](https://github.com/buluma/cordova-builder-master/actions/workflows/main.yml/badge.svg)
+Github Actions [![CI](https://github.com/buluma/cordova-builder-master/actions/workflows/blank.yml/badge.svg?branch=master)](https://github.com/buluma/cordova-builder-master/actions/workflows/blank.yml)
 
 Travis CI      [![Build Status](https://travis-ci.org/buluma/cordova-builder-master.svg?branch=main)](https://travis-ci.org/buluma/cordova-builder-master)
 

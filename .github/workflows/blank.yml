@@ -35,6 +35,7 @@ jobs:
         cordova platform add android
         cordova platforms ls
         echo "Adding Plugins"
+        cordova prepare
         cordova plugin ls
         echo "Building apk for Android"
         cordova build android
