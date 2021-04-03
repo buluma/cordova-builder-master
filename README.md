@@ -1,9 +1,9 @@
 # Cordova builder
 # on the cloud with Github and Travis-CI
 
-Github Actions ![CI](https://github.com/buluma/cordova-builder/workflows/CI/badge.svg?branch=master)
+Github Actions ![CI](https://github.com/buluma/cordova-builder/workflows/CI/badge.svg?branch=main)
 
-Travis CI      [![Build Status](https://travis-ci.org/buluma/cordova-builder.svg?branch=master)](https://travis-ci.org/buluma/cordova-builder)
+Travis CI      [![Build Status](https://travis-ci.org/buluma/cordova-builder.svg?branch=main)](https://travis-ci.org/buluma/cordova-builder)
 
 ## How does it work?
 __Each commit will be__
