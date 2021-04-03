@@ -1,14 +1,14 @@
 # Cordova builder
 # on the cloud with Github and Travis-CI
 
-Github Actions ![CI](https://github.com/nguoianphu/cordova-builder/workflows/CI/badge.svg?branch=master)
+Github Actions ![CI](https://github.com/buluma/cordova-builder/workflows/CI/badge.svg?branch=master)
 
-Travis CI      [![Build Status](https://travis-ci.org/nguoianphu/cordova-builder.svg?branch=master)](https://travis-ci.org/nguoianphu/cordova-builder)
+Travis CI      [![Build Status](https://travis-ci.org/buluma/cordova-builder.svg?branch=master)](https://travis-ci.org/buluma/cordova-builder)
 
 ## How does it work?
 __Each commit will be__
 - Built by Travis-ci.org
-- Deployed the APK file to Github Release and tag at https://github.com/nguoianphu/cordova-builder/releases
+- Deployed the APK file to Github Release and tag at https://github.com/buluma/cordova-builder/releases
 
 ## How to use it?
 
@@ -75,7 +75,7 @@ Put the ```www.zip``` into the repo
 
 Add the password ```MyP44ssw0rd``` to Travis-CI
 
-Go to Travis-ci setting, i.e.        https://travis-ci.org/nguoianphu/cordova-builder/settings
+Go to Travis-ci setting, i.e.        https://travis-ci.org/buluma/cordova-builder/settings
 
 In the __Environment Variables__ section, add a variable name ```MY_ZIP_PASSWORD``` and the value ```MyP44ssw0rd```
 
