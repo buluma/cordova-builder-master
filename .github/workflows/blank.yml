@@ -37,8 +37,8 @@ jobs:
     - name: Call Cordova builder
       run: |
         cd $GITHUB_WORKSPACE/www
-        echo "Adding Platforms"
-        cordova platform add android
+        echo "Removing and Adding Platforms"
+        cordova platform rm android && cordova platform add android
         cordova platforms ls
         echo "Adding Plugins"
         cordova prepare
