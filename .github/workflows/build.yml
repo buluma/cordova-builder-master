@@ -17,7 +17,7 @@ jobs:
         with: { fetch-depth: 0 }
       - run: npm ci
       - run: npm run -s relnotes | tee relnotes.txt
-      - uses: jasonkarns/create-release@master
+      - uses: softprops/action-gh-release@v1
         with: { body_path: relnotes.txt }
 
   major-version:
